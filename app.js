@@ -16,6 +16,7 @@ app.use(session({
   }));
 
 app.use(keycloak.middleware());
+app.use('/views/img', express.static("/Users/shaniceehioghiren/Documents/poc-keycloak/views/img"));
 
 
 
