@@ -1,15 +1,12 @@
 {
-  "realm": "poc",
+  "realm": "proof-of-concept",
   "auth-server-url": "http://localhost:8080/",
   "ssl-required": "external",
-  "resource": "poc-keycloak",
+  "resource": "demoapplicationid",
   "verify-token-audience": true,
   "credentials": {
-    "secret": "ytalsCDjsIEDFAxQ7QLIrZzdVzypbArd"
+    "secret": "pYLsVQLpKVACgUTHSZh46uT8XjfU3siV"
   },
   "use-resource-role-mappings": true,
-  "confidential-port": 0,
-  "policy-enforcer": {
-    "credentials": {}
-  }
+  "confidential-port": 0
 }

@@ -21,6 +21,7 @@ services:
       DB_PASSWORD: keycloak
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_LOG_LEVEL: DEBUG
     ports:
       - "8080:8080"
     volumes:
