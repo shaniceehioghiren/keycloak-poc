@@ -1,0 +1,32 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: poc_koycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    ports:
+      - "5430:5430"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.4
+    command: start-dev
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: poc_koycloak
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+    ports:
+      - "8080:8080"
+    volumes:
+      - /Users/shaniceehioghiren/custom-theme⁠:/opt/keycloak/themes/custom-theme
+    depends_on:
+      - postgres
+volumes:
+  pgdata:
+  keycloakdata:
