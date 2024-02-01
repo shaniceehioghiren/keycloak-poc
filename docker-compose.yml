@@ -21,11 +21,11 @@ services:
       DB_PASSWORD: keycloak
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_LOG_LEVEL: DEBUG
     ports:
       - "8080:8080"
     volumes:
-      - /Users/shaniceehioghiren/custom-theme⁠:/opt/keycloak/themes/custom-theme
+      - /Users/shaniceehioghiren/custom-theme/⁠:/opt/keycloak/themes/custom-theme
+      - keycloakdata:/opt/keycloak/data/
     depends_on:
       - postgres
 volumes:
