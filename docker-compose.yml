@@ -1,33 +1,46 @@
 version: '3'
 services:
   postgres:
+    container_name: postgresDB
     image: postgres
     environment:
-      POSTGRES_DB: poc_koycloak
-      POSTGRES_USER: keycloak
+      POSTGRES_DB: keycloakdb
+      POSTGRES_USER: keycloak_demo_user
       POSTGRES_PASSWORD: keycloak
     ports:
-      - "5430:5430"
+      - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - custom-keycloak
   keycloak:
     image: quay.io/keycloak/keycloak:23.0.4
+    restart: unless-stopped
     command: start-dev
     environment:
-      DB_VENDOR: POSTGRES
-      DB_ADDR: postgres
-      DB_DATABASE: poc_koycloak
-      DB_USER: keycloak
-      DB_PASSWORD: keycloak
+      KC_DB: postgres
+      KC_DB_URL_DATABASE: keycloakdb
+      KC_DB_URL: jdbc:postgresql://postgresDB:5432/keycloakdb
+      KC_DB_URL_HOST: postgres
+      KC_DB_USERNAME: keycloak_demo_user
+      KC_DB_PASSWORD: keycloak
+      KC_DB_SCHEMA: public
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - "8080:8080"
+    networks: 
+      - custom-keycloak
     volumes:
-      - /Users/shaniceehioghiren/custom-theme/⁠:/opt/keycloak/themes/custom-theme
+      - /Users/shaniceehioghiren/custom-theme⁠:/opt/keycloak/themes/custom-theme
       - keycloakdata:/opt/keycloak/data/
     depends_on:
       - postgres
 volumes:
   pgdata:
   keycloakdata:
+
+networks:
+  custom-keycloak:
+    name: custom-keycloak
+    driver: bridge
