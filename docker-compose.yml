@@ -22,6 +22,7 @@ services:
       KC_DB_URL_DATABASE: keycloakdb
       KC_DB_URL: jdbc:postgresql://postgresDB:5432/keycloakdb
       KC_DB_URL_HOST: postgres
+      KC_HOSTNAME: localhost
       KC_DB_USERNAME: keycloak_demo_user
       KC_DB_PASSWORD: keycloak
       KC_DB_SCHEMA: public
@@ -32,7 +33,7 @@ services:
     networks: 
       - custom-keycloak
     volumes:
-      - /Users/shaniceehioghiren/custom-theme⁠:/opt/keycloak/themes/custom-theme
+      - /Users/shaniceehioghiren/custom-theme:/opt/keycloak/themes/custom-theme
       - keycloakdata:/opt/keycloak/data/
     depends_on:
       - postgres
