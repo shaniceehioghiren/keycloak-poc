@@ -1,12 +1,11 @@
 {
-  "realm": "demo",
-  "auth-server-url": "http://localhost:8080/",
+  "realm": "proof_of_concept",
+  "auth-server-url": "http://localhost:8890/",
   "ssl-required": "external",
-  "resource": "demo-client",
+  "resource": "CLIENTproof_of_concept",
   "verify-token-audience": true,
   "credentials": {
-    "secret": "LTmJfLQ5WmKE5CXfZNgHilX2eW9ZYMaK"
+    "secret": "QJDdkrKy4baqeUjS9c017v9luixoSWNb"
   },
-  "use-resource-role-mappings": true,
   "confidential-port": 0
 }
