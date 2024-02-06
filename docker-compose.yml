@@ -3,6 +3,8 @@ services:
   keycloak_demo:
     image: quay.io/keycloak/keycloak:23.0.4
     command: start-dev
+    volumes:
+      - /Users/shaniceehioghiren/custom-theme:/opt/keycloak/themes/custom-theme
     environment:
       KC_DB: postgres
       KC_DB_URL_HOST: postgres_keycloak_demo
