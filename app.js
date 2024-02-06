@@ -33,7 +33,7 @@ app.get('/protected/resource', keycloak.protect(), function(req, res){
   });
 
 app.listen(port=3000, function(){
-    console.log("server is running on port" + port);
+    console.log("server is running on port " + port);
 });
 
 
