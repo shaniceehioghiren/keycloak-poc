@@ -1,10 +1,33 @@
 var express = require('express');
 const Keycloak = require('keycloak-connect');
 const session = require('express-session');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 var app = express();
 app.set('view engine', 'ejs');
+app.use(cookieParser());
 
+const keycloakPublicKey = `-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwkKTgEE7R5nK3gWyBjEWsxchwmtJAdYYu37rtZs0cSzRy+hB/xc0q0hd/AS1BZ7HMOR3+6/XGkEbVB7B5D5u9xFEIV6Hile
+UsY0vqAebFxOOitSl8qXs6ec7jOYKEpN8AO0Z1lVDhzfvxck7iRkHVYik86sbtj8AY5UH9bP7dGt5UNyyleLcTn13SkmocQh9MzCFebZBh+w4PNttoIoSbFftc9QY/shVVxsXeA1Xo4p2EHMpzHci+uXykAboS3VZuM7DJiGfJl68QGmibI2BlSe5n4dAebOzlUckWrKfnv2nEu03Uw90k9y/91kUzupWMVWxcC1m4EG4uls9YV6powIDAQAB
+-----END PUBLIC KEY-----`
+
+const validateToken = (req, res, next) => {
+  const token = req.cookies['auth_token'];
+
+  if(!token){
+    return res.status(403).send('A token is required for authenticication');
+  }
+
+  try{
+    const decoded = jwt.verify(token, keycloakPublicKey, { algorithms: ['RS256'] });
+    console.log('Token is valid', decoded);
+    next();
+  }catch(err){
+    return res.status(401).send('Invalid token');
+  }
+}
 let memoryStore = new session.MemoryStore();
 let keycloak = new Keycloak({ store: memoryStore }, 'keycloak.json');
 
@@ -31,6 +54,10 @@ app.get("/bye", keycloak.protect(), function(req, res){
 app.get('/protected/resource', keycloak.protect(), function(req, res){
     res.send("Protected content");
   });
+
+  app.get('/ressource', validateToken, (req, res) => {
+    res.send('Access granted to new part of the site');
+  })
 
 app.listen(port=3000, function(){
     console.log("server is running on port " + port);
