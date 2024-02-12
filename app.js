@@ -47,8 +47,21 @@ app.get("/", function(req, res){
     res.render("home");
 });
 
-app.get("/bye", keycloak.protect(), function(req, res){
-  res.render("bye"); 
+app.get("/bye", keycloak.protect(), async function(req, res){
+  let token;
+  try{
+    const grant = await keycloak.getGrant(req, res);
+    token = grant.access_token;
+    console.log(`Found token ${token}`);
+  }catch(err){
+    console.log('Unable to find the token in KC response'. req.session);
+  }
+  const userProfile = await keycloak.grantManager.userInfo(token);
+  console.log("Found user profile", userProfile);
+  
+  res.send(JSON.stringify(userProfile, null, 4)) 
+  res.render("bye");
+  
 });
 
 app.get('/protected/resource', keycloak.protect(), function(req, res){
