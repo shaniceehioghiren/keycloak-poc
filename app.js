@@ -48,20 +48,23 @@ app.get("/", function(req, res){
 });
 
 app.get("/bye", keycloak.protect(), async function(req, res){
-  let token;
-  try{
+  try {
     const grant = await keycloak.getGrant(req, res);
-    token = grant.access_token;
-    console.log(`Found token ${token}`);
-  }catch(err){
-    console.log('Unable to find the token in KC response'. req.session);
+    const token = grant.access_token.token;
+    console.log(`Found token: ${JSON.stringify(token)}`);
+
+    const userProfile = await keycloak.grantManager.userInfo(token);
+    console.log("Found user profile", userProfile);
+
+    // Note: The line below sends JSON response which conflicts with res.render("bye");
+    // Consider removing it if you want to render a page instead.
+    // res.send(JSON.stringify(userProfile, null, 4));
+
+    res.render("bye", { userProfile: userProfile });
+  } catch (err) {
+    console.error('Error fetching user profile or token', err);
+    res.status(500).send('Internal Server Error');
   }
-  const userProfile = await keycloak.grantManager.userInfo(token);
-  console.log("Found user profile", userProfile);
-  
-  res.send(JSON.stringify(userProfile, null, 4)) 
-  res.render("bye");
-  
 });
 
 app.get('/protected/resource', keycloak.protect(), function(req, res){
