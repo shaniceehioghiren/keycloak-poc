@@ -14,7 +14,7 @@ UsY0vqAebFxOOitSl8qXs6ec7jOYKEpN8AO0Z1lVDhzfvxck7iRkHVYik86sbtj8AY5UH9bP7dGt5UNy
 -----END PUBLIC KEY-----`
 
 const validateToken = (req, res, next) => {
-  const token = req.cookies['auth_token'];
+  const token = req.session.token;
 
   if(!token){
     return res.status(403).send('A token is required for authenticication');
@@ -52,6 +52,7 @@ app.get("/bye", keycloak.protect(), async function(req, res){
     const grant = await keycloak.getGrant(req, res);
     const token = grant.access_token.token;
     console.log(`Found token: ${JSON.stringify(token)}`);
+    req.session.token = token;
 
     const userProfile = await keycloak.grantManager.userInfo(token);
     console.log("Found user profile", userProfile);
@@ -60,7 +61,7 @@ app.get("/bye", keycloak.protect(), async function(req, res){
     // Consider removing it if you want to render a page instead.
     // res.send(JSON.stringify(userProfile, null, 4));
 
-    res.render("bye", { userProfile: userProfile });
+    res.render("bye", { userProfile: userProfile});
   } catch (err) {
     console.error('Error fetching user profile or token', err);
     res.status(500).send('Internal Server Error');
