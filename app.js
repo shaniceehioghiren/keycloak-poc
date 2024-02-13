@@ -62,10 +62,6 @@ app.get("/bye", keycloak.protect(), async function (req, res) {
     const userProfile = await keycloak.grantManager.userInfo(token);
     console.log("Found user profile", userProfile);
 
-    // Note: The line below sends JSON response which conflicts with res.render("bye");
-    // Consider removing it if you want to render a page instead.
-    // res.send(JSON.stringify(userProfile, null, 4));
-
     res.render("bye", { userProfile: userProfile });
   } catch (err) {
     console.error("Error fetching user profile or token", err);
